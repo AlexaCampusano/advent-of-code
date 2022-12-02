@@ -19,31 +19,28 @@ class Elf
   end
 
   def count_food_calories
-    @food_list.map { |food| food.calorie.amount }.reduce(:+)
+    @food_list.map { |food| food.calorie.amount }.sum
   end
 
 end
 
 class CalorieManager
   def initialize(source_path)
-    @elves = []
-    File.read(source_path).split("\n\n").each do |group|
+    @elves = File.read(source_path).split("\n\n").map do |group|
       food_items = group.split("\n").map { |line| Food.new(line.to_i)}
-      @elves << Elf.new(food_items)
+      Elf.new(food_items)
     end
-  end
-
-  def highest_calories_amount
-    @elves.map { |elf| elf.count_food_calories }.max
+    
   end
 
   def top_highest_calories_total(top_length)
     @elves.map { |elf| elf.count_food_calories }
       .max(top_length)
-      .reduce(:+)
+      .sum
   end
+  
 end
 
 result = CalorieManager.new("calorie_source.txt")
-p result.highest_calories_amount
+p result.top_highest_calories_total(1)
 p result.top_highest_calories_total(3)
