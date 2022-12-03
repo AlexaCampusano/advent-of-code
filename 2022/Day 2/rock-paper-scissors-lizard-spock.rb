@@ -69,15 +69,14 @@ end
 
 
 class Game
-    def initialize(input_path, automated: false)
+    def initialize(input_path)
         @input_path = input_path
-        @automated = automated
     end
 
-    def play
+    def play(automated: false)
         File.read(@input_path).split("\n").map do |round|
             elf, human = round.split
-            match = if @automated
+            match = if automated
                 AutomatedMatch.new(elf.to_sym, human.to_sym)
             else
                 Match.new(elf.to_sym, human.to_sym)
@@ -90,5 +89,4 @@ end
 
 game = Game.new("rock-paper-scissors-lizard-spock.txt")
 p "Part one: #{game.play}"
-automated_game = Game.new("rock-paper-scissors-lizard-spock.txt", automated: true)
-p "Part two: #{automated_game.play}"
+p "Part two: #{game.play(automated: true)}"
